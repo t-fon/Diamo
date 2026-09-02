@@ -609,11 +609,11 @@
       L.control.zoom({ position: 'topleft' }).addTo(map);
 
       // CartoDB Dark Matter with solid roads
-      darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19,
-        subdomains: 'abcd',
-        className: 'dark-matter-layer'
-      });
+      darkTileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    subdomains: 'abcd',
+    className: 'dark-matter-layer'
+});
 
       // Esri High-Resolution World Imagery
       satTileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
