@@ -9,39 +9,27 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            obsidian: {
-              950: '#07080c',
-              900: '#0c0e14',
-              850: '#11141d',
-              800: '#161925',
-              700: '#202434',
-              600: '#2e344a'
-            },
-            luma: {
-              primary: '#10b981',
-              accent: '#6366f1',
-              cyan: '#06b6d4',
-              surface: 'rgba(17, 20, 29, 0.72)',
-              surfaceHover: 'rgba(26, 31, 46, 0.85)',
-              border: 'rgba(255, 255, 255, 0.08)',
-              borderHover: 'rgba(255, 255, 255, 0.18)'
-            }
-          },
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'Fira Code', 'monospace']
-          },
-          boxShadow: {
-            'luma-glow': '0 0 25px -4px rgba(16, 185, 129, 0.25)',
-            'luma-accent': '0 0 25px -4px rgba(99, 102, 241, 0.3)',
-            'glass': '0 20px 40px -15px rgba(0, 0, 0, 0.6)'
-          }
-        }
+  theme: {
+    extend: {
+      colors: {
+        ember: '#fc5000',
+        pumice: '#e2e2df',
+        limestone: '#f7f6f2',
+        obsidian: '#070607',
+        sulfur: '#f5f28e',
+        plasma: '#524ae9'
+      },
+      fontFamily: {
+        display: ['"Bebas Neue"', 'sans-serif'],
+        sans: ['"DM Sans"', 'sans-serif']
+      },
+      borderRadius: {
+        'card': '40px',
+        'pill': '800px'
       }
+    }
+  }
+}
     };
   </script>
 
@@ -54,8 +42,79 @@
   <!-- Leaflet & Phosphor Icons Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
-
+  
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@500&display=swap" rel="stylesheet">
+  
   <style>
+    body {
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  color: #070607;
+}
+
+/* Caldera Architectural Display Headings */
+.font-caldera-display {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.02em;
+  line-height: 0.95;
+  text-transform: uppercase;
+}
+
+/* Primary Action: Molten Ember Pill */
+.btn-caldera-primary {
+  background-color: #fc5000;
+  color: #070607;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 800px;
+  padding: 10px 22px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: opacity 0.15s ease, transform 0.1s ease;
+  box-shadow: none !important;
+}
+.btn-caldera-primary:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* Secondary Surface Pill (Limestone with subtle border) */
+.btn-caldera-secondary {
+  background-color: #f7f6f2;
+  color: #070607;
+  border: 1.5px solid #070607;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  border-radius: 800px;
+  padding: 10px 20px;
+  transition: all 0.15s ease;
+}
+.btn-caldera-secondary:hover {
+  background-color: #e2e2df;
+}
+
+/* Caldera Flat Surface Card */
+.card-caldera {
+  background-color: #f7f6f2;
+  border-radius: 40px;
+  border: none;
+  box-shadow: none !important;
+}
+
+/* Sulfur Tag / Badge */
+.badge-sulfur {
+  background-color: #f5f28e;
+  color: #070607;
+  border-radius: 800px;
+  font-size: 12px;
+  padding: 4px 10px;
+  font-weight: 500;
+}
     /* Custom Scrollbar for Luma Feel */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: rgba(12, 14, 20, 0.5); }
