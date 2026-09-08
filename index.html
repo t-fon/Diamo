@@ -38,8 +38,7 @@
           },
           borderRadius: {
             'card': '40px',
-            'pill': '800px',
-            'input': '100px'
+            'pill': '800px'
           }
         }
       }
@@ -67,12 +66,10 @@
       color: var(--color-obsidian);
       font-family: 'DM Sans', sans-serif;
       font-weight: 500;
-      overflow-x: hidden;
       margin: 0;
       padding: 0;
     }
 
-    /* Caldera Architectural Display Headings */
     .font-caldera {
       font-family: 'Bebas Neue', sans-serif;
       letter-spacing: 0.02em;
@@ -80,7 +77,6 @@
       text-transform: uppercase;
     }
 
-    /* Caldera Flattened Zero-Shadow Surfaces */
     .caldera-surface {
       background-color: var(--color-limestone);
       border-radius: 40px;
@@ -91,22 +87,21 @@
       border-radius: 800px;
     }
 
-    /* Custom Leaflet Map Container */
     #map {
       width: 100%;
       height: 100%;
-      background: var(--color-pumice);
+      min-height: 100%;
+      background: #1a1a1a;
       outline: none;
       z-index: 10;
     }
 
-    /* Leaflet popup customization to match Caldera */
     .leaflet-popup-content-wrapper {
       background: var(--color-limestone) !important;
       color: var(--color-obsidian) !important;
       border-radius: 24px !important;
       padding: 6px !important;
-      box-shadow: 0 10px 30px rgba(7, 6, 7, 0.1) !important;
+      box-shadow: 0 10px 30px rgba(7, 6, 7, 0.12) !important;
       border: 1px solid rgba(7, 6, 7, 0.08) !important;
     }
     .leaflet-popup-tip {
@@ -118,10 +113,8 @@
       margin: 10px 14px !important;
     }
 
-    /* Custom scrollbars */
     ::-webkit-scrollbar {
       width: 6px;
-      height: 6px;
     }
     ::-webkit-scrollbar-track {
       background: var(--color-pumice);
@@ -130,12 +123,6 @@
       background: #c7c6c2;
       border-radius: 10px;
     }
-
-    /* Halftone dot pattern signature motif */
-    .halftone-accent {
-      background-image: radial-gradient(var(--color-ember) 15%, transparent 16%);
-      background-size: 10px 10px;
-    }
   </style>
 </head>
 <body class="w-screen h-screen flex flex-col overflow-hidden bg-pumice text-obsidian">
@@ -143,7 +130,6 @@
   <!-- TOP APP BAR -->
   <header class="w-full bg-pumice px-6 py-4 flex items-center justify-between z-30 shrink-0 border-b border-obsidian/10">
     <div class="flex items-center gap-4">
-      <!-- Brand Lockup -->
       <div class="flex items-center gap-3 bg-limestone px-5 py-2.5 rounded-pill border border-obsidian/10">
         <div class="w-8 h-8 rounded-pill bg-ember flex items-center justify-center text-obsidian font-display text-xl leading-none pt-0.5">
           D
@@ -154,8 +140,7 @@
         </div>
       </div>
 
-      <!-- Quick Category / Sport Pills -->
-      <div class="hidden md:flex items-center gap-2 overflow-x-auto py-1">
+      <div class="hidden md:flex items-center gap-2">
         <button class="filter-sport-btn active px-4 py-2 rounded-pill text-xs font-medium uppercase tracking-wider bg-ember text-obsidian transition" data-sport="all">
           All Spots
         </button>
@@ -171,7 +156,6 @@
       </div>
     </div>
 
-    <!-- Right Controls -->
     <div class="flex items-center gap-3">
       <div class="hidden sm:flex items-center bg-limestone rounded-pill px-4 py-2 border border-obsidian/10 text-xs">
         <span class="w-2 h-2 rounded-pill bg-ember inline-block mr-2 animate-pulse"></span>
@@ -185,11 +169,11 @@
     </div>
   </header>
 
-<!-- MAIN VIEWPORT CONTAINER -->
-  <main class="flex-1 relative w-full h-full flex overflow-hidden">
+  <!-- MAIN CONTAINER: SIDEBAR ON LEFT, MAP ON RIGHT -->
+  <main class="flex-1 w-full h-full flex overflow-hidden relative">
 
-    <!-- SIDEBAR DOSSIER LIST (NOW ON THE LEFT) -->
-    <aside class="w-full md:w-[440px] lg:w-[480px] h-full bg-pumice p-4 md:p-6 flex flex-col gap-4 overflow-y-auto z-20 shrink-0 border-r border-obsidian/10">
+    <!-- SIDEBAR DOSSIER LIST (LEFT) -->
+    <aside class="w-full md:w-[420px] lg:w-[460px] h-full bg-pumice p-4 md:p-6 flex flex-col gap-4 overflow-y-auto z-20 shrink-0 border-r border-obsidian/10">
       <div class="flex items-center justify-between pt-1">
         <div class="flex items-center gap-2">
           <span class="bg-sulfur text-obsidian text-[11px] font-medium px-3 py-1 rounded-pill uppercase tracking-wider">VERIFIED PARCELS</span>
@@ -200,58 +184,39 @@
 
       <!-- Field Cards Container -->
       <div id="fieldCardsContainer" class="flex flex-col gap-4">
-        <!-- Dynamically populated via JS -->
+        <!-- Injected via JavaScript -->
       </div>
     </aside>
 
-    <!-- MAP CONTAINER (NOW ON THE RIGHT) -->
-    <div class="flex-1 h-full w-full relative">
+    <!-- MAP CONTAINER (RIGHT) -->
+    <div class="flex-1 h-full relative overflow-hidden">
       <div id="map"></div>
 
-    <!-- Floating Map Utility Pills -->
+      <!-- Floating Map Utility Pills -->
       <div class="absolute bottom-6 left-6 z-20 flex flex-wrap gap-2">
-        <button id="btnLocateMe" class="bg-ember text-obsidian hover:opacity-90 px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
+        <button id="btnLocateMe" class="bg-ember text-obsidian hover:opacity-90 px-4 py-2.5 rounded-pill text-xs font-medium flex items-center gap-2 shadow-sm transition">
           <i class="ph ph-crosshair font-bold text-base"></i>
           <span>NEAR ME (GPS)</span>
         </button>
-        <button id="btnResetView" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
+        <button id="btnResetView" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2.5 rounded-pill text-xs font-medium flex items-center gap-2 transition">
           <i class="ph ph-compass text-base text-ember"></i>
           <span>RESET VIEW</span>
         </button>
-        <button id="btnMeasure" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
+        <button id="btnMeasure" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2.5 rounded-pill text-xs font-medium flex items-center gap-2 transition">
           <i class="ph ph-ruler text-base"></i>
           <span id="measureText">MEASURE DISTANCES</span>
         </button>
       </div>
-
-  </main>
-
-    <!-- SIDEBAR DOSSIER LIST (40px Rounded Caldera Surface) -->
-    <aside class="w-full md:w-[440px] lg:w-[480px] h-full bg-pumice p-4 md:p-6 flex flex-col gap-4 overflow-y-auto z-20 shrink-0 border-l border-obsidian/10">
-      <div class="flex items-center justify-between pt-1">
-        <div class="flex items-center gap-2">
-          <span class="bg-sulfur text-obsidian text-[11px] font-medium px-3 py-1 rounded-pill uppercase tracking-wider">VERIFIED PARCELS</span>
-          <span id="fieldCount" class="text-xs opacity-60">3 LOCATIONS</span>
-        </div>
-        <span class="text-xs tracking-wider opacity-60 font-sans">SELECT TO FLY</span>
-      </div>
-
-      <!-- Field Cards Container -->
-      <div id="fieldCardsContainer" class="flex flex-col gap-4">
-        <!-- Dynamically populated via JS -->
-      </div>
-    </aside>
+    </div>
 
   </main>
 
   <script>
-    // Dallas Sandlot & Open Turf Locations
     const FIELDS = [
       {
         id: 'reverchon',
         name: 'REVERCHON PARK MEADOW',
         sport: 'sandlot',
-        tag: 'SANDLOT / TURF',
         badge: 'UNFENCED PARCEL',
         badgeType: 'sulfur',
         dist: '2.1 MI',
@@ -266,7 +231,6 @@
         id: 'flagpole-hill',
         name: 'FLAGPOLE HILL OPEN COMMONS',
         sport: 'sandlot',
-        tag: 'SANDLOT',
         badge: 'OPEN DIAMOND',
         badgeType: 'sulfur',
         dist: '6.4 MI',
@@ -281,7 +245,6 @@
         id: 'glencoe',
         name: 'GLENCOE PARK BOWL',
         sport: 'turf',
-        tag: 'OPEN TURF',
         badge: 'NIGHT ILLUMINATED',
         badgeType: 'ember',
         dist: '4.8 MI',
@@ -294,28 +257,29 @@
       }
     ];
 
-    // Initialize Map with Satellite Layer
+    // Initialize Map on the right
     const map = L.map('map', {
       zoomControl: false
     }).setView([32.825, -96.775], 12);
 
-    // Zoom controls relocated to clean top-right
     L.control.zoom({ position: 'topright' }).addTo(map);
 
-    // Esri High-Resolution World Imagery
+    // Esri High-Resolution Satellite
     L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
       maxZoom: 18,
-      attribution: '&copy; Esri &mdash; Sandlot Scout'
+      attribution: '&copy; Esri &mdash; Diamo Scout'
     }).addTo(map);
 
-    // Custom Map Marker Icons using Caldera Ember
-    function createCalderaMarker(selected = false) {
+    // Leaflet invalidation to ensure tiles load on viewport resize
+    setTimeout(() => { map.invalidateSize(); }, 250);
+
+    function createCalderaMarker() {
       return L.divIcon({
-        className: 'custom-marker',
+        className: 'custom-caldera-marker',
         html: `
           <div style="
-            width: ${selected ? '36px' : '28px'};
-            height: ${selected ? '36px' : '28px'};
+            width: 28px;
+            height: 28px;
             background-color: var(--color-ember);
             border: 3px solid var(--color-limestone);
             border-radius: 800px;
@@ -324,31 +288,30 @@
             justify-content: center;
             color: var(--color-obsidian);
             font-weight: 700;
-            font-size: ${selected ? '14px' : '11px'};
+            font-size: 11px;
             box-shadow: 0 4px 15px rgba(252, 80, 0, 0.4);
-            transition: all 0.2s ease;
-          ">
-            ●
-          </div>
+          ">●</div>
         `,
-        iconSize: [32, 32],
-        iconAnchor: [16, 16]
+        iconSize: [28, 28],
+        iconAnchor: [14, 14]
       });
     }
 
     const markers = {};
 
-    // Render Cards in Sidebar
     function renderCards(filter = 'all') {
       const container = document.getElementById('fieldCardsContainer');
       container.innerHTML = '';
 
-      const filtered = filter === 'all' ? FIELDS : FIELDS.filter(f => f.sport === filter || (filter === 'lights' && f.badgeType === 'ember'));
+      const filtered = filter === 'all' 
+        ? FIELDS 
+        : FIELDS.filter(f => f.sport === filter || (filter === 'lights' && f.badgeType === 'ember'));
+      
       document.getElementById('fieldCount').innerText = `${filtered.length} LOCATIONS`;
 
       filtered.forEach(field => {
         const card = document.createElement('div');
-        card.className = 'caldera-surface p-7 flex flex-col gap-4 text-obsidian cursor-pointer hover:bg-white transition duration-150 border border-obsidian/5';
+        card.className = 'caldera-surface p-6 flex flex-col gap-3 text-obsidian cursor-pointer hover:bg-white transition duration-150 border border-obsidian/5';
         card.id = `card-${field.id}`;
 
         card.innerHTML = `
@@ -360,11 +323,11 @@
           </div>
 
           <div>
-            <h2 class="font-caldera text-3xl text-obsidian tracking-wide mb-1.5">${field.name}</h2>
+            <h2 class="font-caldera text-3xl text-obsidian tracking-wide mb-1">${field.name}</h2>
             <p class="text-xs leading-relaxed opacity-80">${field.desc}</p>
           </div>
 
-          <div class="bg-pumice/70 rounded-2xl p-3 flex flex-col gap-1.5 text-[11px]">
+          <div class="bg-pumice/70 rounded-2xl p-3 flex flex-col gap-1 text-[11px]">
             <div class="flex items-center gap-2">
               <i class="ph ph-ruler text-ember"></i>
               <span class="font-medium">${field.dimensions}</span>
@@ -375,7 +338,7 @@
             </div>
           </div>
 
-          <button onclick="flyToField('${field.id}')" class="bg-ember hover:opacity-90 active:scale-98 text-obsidian py-3 rounded-pill text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition mt-1">
+          <button onclick="flyToField('${field.id}')" class="bg-ember hover:opacity-90 active:scale-98 text-obsidian py-2.5 rounded-pill text-xs font-medium uppercase tracking-wider flex items-center justify-center gap-2 transition mt-1">
             <i class="ph ph-navigation-arrow font-bold text-sm"></i>
             <span>FLY TO DIAMOND</span>
           </button>
@@ -389,21 +352,14 @@
       });
     }
 
-    // Fly to Location and Open Popup
     function flyToField(id) {
       const field = FIELDS.find(f => f.id === id);
       if (!field) return;
 
-      map.flyTo([field.lat, field.lng], 16, {
-        duration: 1.4,
-        easeLinearity: 0.25
-      });
+      map.flyTo([field.lat, field.lng], 16, { duration: 1.4 });
 
-      if (markers[id]) {
-        markers[id].openPopup();
-      }
+      if (markers[id]) markers[id].openPopup();
 
-      // Highlight card
       document.querySelectorAll('#fieldCardsContainer > div').forEach(el => el.classList.remove('ring-2', 'ring-ember'));
       const activeCard = document.getElementById(`card-${id}`);
       if (activeCard) {
@@ -412,18 +368,18 @@
       }
     }
 
-    // Add Markers to Map
+    // Add field pins to map
     FIELDS.forEach(field => {
       const marker = L.marker([field.lat, field.lng], { icon: createCalderaMarker() }).addTo(map);
       marker.bindPopup(`
-        <div style="min-width: 190px;">
+        <div style="min-width: 180px;">
           <span style="background: var(--color-sulfur); color: var(--color-obsidian); font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 800px; text-transform: uppercase;">
             ${field.badge}
           </span>
-          <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 22px; margin: 8px 0 4px; line-height: 0.95; letter-spacing: 0.02em;">
+          <h3 style="font-family: 'Bebas Neue', sans-serif; font-size: 20px; margin: 6px 0 2px; line-height: 0.95; letter-spacing: 0.02em;">
             ${field.name}
           </h3>
-          <p style="font-size: 11px; opacity: 0.8; margin: 0 0 8px 0;">${field.surface}</p>
+          <p style="font-size: 11px; opacity: 0.8; margin: 0 0 6px 0;">${field.surface}</p>
           <div style="font-size: 10px; font-weight: 600; color: var(--color-ember);">${field.dimensions}</div>
         </div>
       `);
@@ -432,13 +388,82 @@
       markers[field.id] = marker;
     });
 
+    // Haversine formula for mile distance
+    function calculateDistanceMiles(lat1, lon1, lat2, lon2) {
+      const R = 3958.8;
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return (R * c).toFixed(1);
+    }
+
+    // GPS Near Me functionality
+    let userMarker = null;
+    let userAccuracyCircle = null;
+
+    document.getElementById('btnLocateMe').addEventListener('click', () => {
+      const btn = document.getElementById('btnLocateMe');
+      btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i><span>ACQUIRING GPS...</span>';
+
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const uLat = pos.coords.latitude;
+          const uLng = pos.coords.longitude;
+
+          if (userMarker) map.removeLayer(userMarker);
+          if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
+
+          userMarker = L.circleMarker([uLat, uLng], {
+            radius: 8,
+            fillColor: '#524ae9',
+            color: '#ffffff',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 1
+          }).addTo(map);
+
+          userAccuracyCircle = L.circle([uLat, uLng], {
+            radius: pos.coords.accuracy,
+            fillColor: '#524ae9',
+            fillOpacity: 0.12,
+            color: 'transparent'
+          }).addTo(map);
+
+          FIELDS.forEach(field => {
+            field.dist = `${calculateDistanceMiles(uLat, uLng, field.lat, field.lng)} MI`;
+            field._sortDist = parseFloat(field.dist);
+          });
+          FIELDS.sort((a, b) => a._sortDist - b._sortDist);
+
+          map.flyTo([uLat, uLng], 13, { duration: 1.2 });
+          renderCards(document.querySelector('.filter-sport-btn.active')?.dataset.sport || 'all');
+          btn.innerHTML = '<i class="ph ph-check-circle font-bold text-base"></i><span>SORTED NEARBY</span>';
+        },
+        () => {
+          alert('Location access denied or unavailable. Please enable browser location permissions.');
+          btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+
     // Reset View Button
     document.getElementById('btnResetView').addEventListener('click', () => {
       map.flyTo([32.825, -96.775], 12);
       document.querySelectorAll('#fieldCardsContainer > div').forEach(el => el.classList.remove('ring-2', 'ring-ember'));
     });
 
-    // Sport Filtering Buttons
+    // Category filter pills
     document.querySelectorAll('.filter-sport-btn').forEach(btn => {
       btn.addEventListener('click', () => {
         document.querySelectorAll('.filter-sport-btn').forEach(b => {
@@ -452,7 +477,7 @@
       });
     });
 
-    // Simple Measurement Tool Toggle
+    // Turf Measurement Tool
     let measuring = false;
     let measurePoints = [];
     let measureLine = null;
@@ -479,8 +504,8 @@
       measurePoints.push(e.latlng);
 
       if (measurePoints.length === 2) {
-        const distMeters = measurePoints[0].distanceTo(measurePoints[1]);
-        const distFeet = Math.round(distMeters * 3.28084);
+        const distM = measurePoints[0].distanceTo(measurePoints[1]);
+        const distFt = Math.round(distM * 3.28084);
 
         if (measureLine) map.removeLayer(measureLine);
         measureLine = L.polyline(measurePoints, {
@@ -491,7 +516,7 @@
 
         L.popup()
           .setLatLng(e.latlng)
-          .setContent(`<div class="font-caldera text-xl">${distFeet} FEET / ${Math.round(distMeters)} METERS</div>`)
+          .setContent(`<div class="font-caldera text-xl">${distFt} FEET / ${Math.round(distM)} METERS</div>`)
           .openOn(map);
 
         measuring = false;
@@ -499,81 +524,7 @@
         document.getElementById('btnMeasure').classList.remove('bg-ember');
       }
     });
-// User GPS tracking state
-    let userMarker = null;
-    let userAccuracyCircle = null;
 
-    // Haversine formula to compute accurate road/aerial distance in miles
-    function calculateDistanceMiles(lat1, lon1, lat2, lon2) {
-      const R = 3958.8; // Radius of Earth in miles
-      const dLat = (lat2 - lat1) * (Math.PI / 180);
-      const dLon = (lon2 - lon1) * (Math.PI / 180);
-      const a = 
-        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
-        Math.sin(dLon / 2) * Math.sin(dLon / 2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-      return (R * c).toFixed(1);
-    }
-
-    // Geolocation / Near Me handler
-    document.getElementById('btnLocateMe').addEventListener('click', () => {
-      const btn = document.getElementById('btnLocateMe');
-      btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i><span>ACQUIRING GPS...</span>';
-
-      if (!navigator.geolocation) {
-        alert('Geolocation is not supported by your browser.');
-        btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const userLat = position.coords.latitude;
-          const userLng = position.coords.longitude;
-
-          // Remove prior location marker if present
-          if (userMarker) map.removeLayer(userMarker);
-          if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
-
-          // Draw Caldera pulsing user beacon
-          userMarker = L.circleMarker([userLat, userLng], {
-            radius: 8,
-            fillColor: '#524ae9', // Plasma Violet accent
-            color: '#ffffff',
-            weight: 3,
-            opacity: 1,
-            fillOpacity: 1
-          }).addTo(map);
-
-          userAccuracyCircle = L.circle([userLat, userLng], {
-            radius: position.coords.accuracy,
-            fillColor: '#524ae9',
-            fillOpacity: 0.1,
-            color: 'transparent'
-          }).addTo(map);
-
-          // Update dynamic distance on all fields and sort closest first
-          FIELDS.forEach(field => {
-            field.dist = `${calculateDistanceMiles(userLat, userLng, field.lat, field.lng)} MI`;
-            field._sortDist = parseFloat(field.dist);
-          });
-          FIELDS.sort((a, b) => a._sortDist - b._sortDist);
-
-          // Pan camera to user and rerender sidebar
-          map.flyTo([userLat, userLng], 14, { duration: 1.2 });
-          renderCards(document.querySelector('.filter-sport-btn.active')?.dataset.sport || 'all');
-
-          btn.innerHTML = '<i class="ph ph-check-circle font-bold text-base"></i><span>SORTED BY NEARBY</span>';
-        },
-        (error) => {
-          alert('Unable to retrieve your location. Please ensure location permissions are enabled in your browser.');
-          btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
-        },
-        { enableHighAccuracy: true, timeout: 10000 }
-      );
-    });
-    
     // Initial render
     renderCards('all');
   </script>
