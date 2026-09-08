@@ -185,10 +185,26 @@
     </div>
   </header>
 
-  <!-- MAIN VIEWPORT CONTAINER -->
+<!-- MAIN VIEWPORT CONTAINER -->
   <main class="flex-1 relative w-full h-full flex overflow-hidden">
 
-    <!-- MAP CONTAINER -->
+    <!-- SIDEBAR DOSSIER LIST (NOW ON THE LEFT) -->
+    <aside class="w-full md:w-[440px] lg:w-[480px] h-full bg-pumice p-4 md:p-6 flex flex-col gap-4 overflow-y-auto z-20 shrink-0 border-r border-obsidian/10">
+      <div class="flex items-center justify-between pt-1">
+        <div class="flex items-center gap-2">
+          <span class="bg-sulfur text-obsidian text-[11px] font-medium px-3 py-1 rounded-pill uppercase tracking-wider">VERIFIED PARCELS</span>
+          <span id="fieldCount" class="text-xs opacity-60">3 LOCATIONS</span>
+        </div>
+        <span class="text-xs tracking-wider opacity-60 font-sans">SELECT TO FLY</span>
+      </div>
+
+      <!-- Field Cards Container -->
+      <div id="fieldCardsContainer" class="flex flex-col gap-4">
+        <!-- Dynamically populated via JS -->
+      </div>
+    </aside>
+
+    <!-- MAP CONTAINER (NOW ON THE RIGHT) -->
     <div class="flex-1 h-full w-full relative">
       <div id="map"></div>
 
@@ -204,6 +220,8 @@
         </button>
       </div>
     </div>
+
+  </main>
 
     <!-- SIDEBAR DOSSIER LIST (40px Rounded Caldera Surface) -->
     <aside class="w-full md:w-[440px] lg:w-[480px] h-full bg-pumice p-4 md:p-6 flex flex-col gap-4 overflow-y-auto z-20 shrink-0 border-l border-obsidian/10">
