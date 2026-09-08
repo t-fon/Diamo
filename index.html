@@ -208,18 +208,21 @@
     <div class="flex-1 h-full w-full relative">
       <div id="map"></div>
 
-      <!-- Floating Map Utility Pills -->
+    <!-- Floating Map Utility Pills -->
       <div class="absolute bottom-6 left-6 z-20 flex flex-wrap gap-2">
+        <button id="btnLocateMe" class="bg-ember text-obsidian hover:opacity-90 px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
+          <i class="ph ph-crosshair font-bold text-base"></i>
+          <span>NEAR ME (GPS)</span>
+        </button>
         <button id="btnResetView" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
           <i class="ph ph-compass text-base text-ember"></i>
-          <span>RESET DALLAS VIEW</span>
+          <span>RESET VIEW</span>
         </button>
         <button id="btnMeasure" class="bg-limestone text-obsidian border border-obsidian/10 hover:bg-[#ebe9e3] px-4 py-2 rounded-pill text-xs font-medium flex items-center gap-2 transition">
           <i class="ph ph-ruler text-base"></i>
           <span id="measureText">MEASURE DISTANCES</span>
         </button>
       </div>
-    </div>
 
   </main>
 
@@ -496,7 +499,81 @@
         document.getElementById('btnMeasure').classList.remove('bg-ember');
       }
     });
+// User GPS tracking state
+    let userMarker = null;
+    let userAccuracyCircle = null;
 
+    // Haversine formula to compute accurate road/aerial distance in miles
+    function calculateDistanceMiles(lat1, lon1, lat2, lon2) {
+      const R = 3958.8; // Radius of Earth in miles
+      const dLat = (lat2 - lat1) * (Math.PI / 180);
+      const dLon = (lon2 - lon1) * (Math.PI / 180);
+      const a = 
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) * 
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      return (R * c).toFixed(1);
+    }
+
+    // Geolocation / Near Me handler
+    document.getElementById('btnLocateMe').addEventListener('click', () => {
+      const btn = document.getElementById('btnLocateMe');
+      btn.innerHTML = '<i class="ph ph-spinner animate-spin text-base"></i><span>ACQUIRING GPS...</span>';
+
+      if (!navigator.geolocation) {
+        alert('Geolocation is not supported by your browser.');
+        btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const userLat = position.coords.latitude;
+          const userLng = position.coords.longitude;
+
+          // Remove prior location marker if present
+          if (userMarker) map.removeLayer(userMarker);
+          if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
+
+          // Draw Caldera pulsing user beacon
+          userMarker = L.circleMarker([userLat, userLng], {
+            radius: 8,
+            fillColor: '#524ae9', // Plasma Violet accent
+            color: '#ffffff',
+            weight: 3,
+            opacity: 1,
+            fillOpacity: 1
+          }).addTo(map);
+
+          userAccuracyCircle = L.circle([userLat, userLng], {
+            radius: position.coords.accuracy,
+            fillColor: '#524ae9',
+            fillOpacity: 0.1,
+            color: 'transparent'
+          }).addTo(map);
+
+          // Update dynamic distance on all fields and sort closest first
+          FIELDS.forEach(field => {
+            field.dist = `${calculateDistanceMiles(userLat, userLng, field.lat, field.lng)} MI`;
+            field._sortDist = parseFloat(field.dist);
+          });
+          FIELDS.sort((a, b) => a._sortDist - b._sortDist);
+
+          // Pan camera to user and rerender sidebar
+          map.flyTo([userLat, userLng], 14, { duration: 1.2 });
+          renderCards(document.querySelector('.filter-sport-btn.active')?.dataset.sport || 'all');
+
+          btn.innerHTML = '<i class="ph ph-check-circle font-bold text-base"></i><span>SORTED BY NEARBY</span>';
+        },
+        (error) => {
+          alert('Unable to retrieve your location. Please ensure location permissions are enabled in your browser.');
+          btn.innerHTML = '<i class="ph ph-crosshair font-bold text-base"></i><span>NEAR ME (GPS)</span>';
+        },
+        { enableHighAccuracy: true, timeout: 10000 }
+      );
+    });
+    
     // Initial render
     renderCards('all');
   </script>
